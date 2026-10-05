@@ -1,0 +1,35 @@
+{
+  "id": "necro-slider",
+  "title": "Necro Slider",
+  "description": "A private 0–100 scale for one paladin, stored on the actor in the world. Necromancy and applied necrotic damage push the scale. Divine Smite can come out necrotic. The GM is asked before any feature or oath changes.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "13.351",
+    "verified": "13.351"
+  },
+  "esmodules": ["scripts/module.mjs"],
+  "styles": ["styles/necro-slider.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": true,
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "5.3.3",
+          "verified": "5.3.3"
+        }
+      }
+    ]
+  },
+  "url": "",
+  "manifest": "",
+  "download": ""
+}

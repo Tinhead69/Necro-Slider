@@ -1,0 +1,21 @@
+.necro-slider-whisper {
+  border-left: 3px solid #6e7f8d;
+  margin: 0;
+  padding-left: 0.7rem;
+  color: var(--color-text-secondary, inherit);
+}
+
+.necro-slider-whisper p {
+  margin: 0.25rem 0;
+}
+
+.necro-slider-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.necro-slider-actions button {
+  font-size: 0.85rem;
+}
