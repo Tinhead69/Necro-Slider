@@ -29,7 +29,7 @@
       }
     ]
   },
-  "url": "",
-  "manifest": "",
-  "download": ""
+ "url": "https://github.com/Tinhead69/Necro-Slider",
+"manifest": "https://raw.githubusercontent.com/Tinhead69/Necro-Slider/main/module.json",
+"download": "https://github.com/Tinhead69/Necro-Slider/archive/refs/heads/main.zip"
 }
