@@ -175,6 +175,21 @@ test("one credit: cast, damage, smite, cantrip, reroll, cancel", () => {
   }).points, 0);
 });
 
+test("radiant spell casts reduce by one, with cancellation and smite exclusions", () => {
+  const event = { kind: "cast", isBoundActor: true, hasRadiant: true };
+  for (const slotLevel of [null, 1, 9]) {
+    assert.equal(creditForEvent({ ...event, slotLevel }).points, -1);
+  }
+  assert.equal(creditForEvent({ ...event, isNecromancy: true }).points, -1);
+  assert.equal(creditForEvent({ ...event, cancelled: true }).points, 0);
+  assert.equal(creditForEvent({ ...event, isBoundActor: false }).points, 0);
+  assert.equal(creditForEvent({ ...event, isDivineSmite: true }).points, 0);
+  assert.equal(creditForEvent({ ...event, kind: "damage" }).points, 0);
+  assert.equal(nextScale(0, -1).value, 0);
+  assert.equal(nextScale(100, -1).value, 99);
+  assert.deepEqual(firedAfterChange(99, [25, 50, 75, 100]), [25, 50, 75]);
+});
+
 test("thresholds fire in order, once, until the scale is set back below them", () => {
   assert.deepEqual(thresholdsCrossed(0, 80, []), [25, 50, 75]);
   assert.deepEqual(thresholdsCrossed(24, 25, []), [25]);

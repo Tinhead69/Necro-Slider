@@ -159,6 +159,7 @@ export function isUndeadTypeValue(value) {
  * @param {number|null} [event.slotLevel]
  * @param {number} [event.baseLevel]
  * @param {boolean} [event.hasNecrotic]
+ * @param {boolean} [event.hasRadiant]
  * @param {boolean} [event.isDivineSmite]
  * @param {boolean} [event.alreadyCountedAsCast]
  * @param {boolean} [event.alreadyCountedUse]
@@ -178,6 +179,7 @@ export function creditForEvent(event) {
  * @returns {{ points: number, reason: string }}
  */
 function creditCast(event) {
+  if (event.hasRadiant && !event.isDivineSmite) return { points: -1, reason: "radiant" };
   if (!event.isNecromancy) return { points: 0, reason: "not-necromancy" };
   const slot = positiveInt(event.slotLevel);
   if (slot != null) return { points: slot, reason: "slot" };

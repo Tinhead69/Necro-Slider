@@ -29,10 +29,11 @@ One event, one credit.
 - A necromancy spell that also deals necrotic damage counts on the cast. Later damage from that same spell, including concentration, does not add again.
 - Divine Smite’s type flip does not add points.
 - A dialog, a cancelled roll, damage he takes, and damage from another actor do not move the scale.
-- At 100 the number stays. The GM still hears what it would have reached.
+- Increases stop at 100. The GM still hears what it would have reached.
+- A completed spell cast with radiant damage reduces the scale by 1, regardless of slot level, to a minimum of 0. This applies once per cast, including cantrips, rather than once per target or damage tick. Radiant damage takes priority over the necromancy cast increase if a spell has both. Divine Smite keeps its special rule and does not reduce the scale.
 - Every automatic change has a one-step GM undo on that whisper.
 
-Radiant and divine casts do not pull the scale down.
+Healing and other divine spells without radiant damage do not pull the scale down.
 
 ## Divine Smite
 
@@ -59,5 +60,5 @@ Setting the starting number up from the empty 0 will offer every breakpoint that
 The dice, clamp, credit, and penalty rules run without Foundry:
 
 ```bash
-node --test tests/rules.test.mjs
+node --test tests/*.test.mjs
 ```

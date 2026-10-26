@@ -47,7 +47,7 @@ const GM_LINES = {
   25: "Breakpoint 25. No feature change. Attack rolls against undead take −2, labeled Slipping vow.",
   50: "Breakpoint 50. Attack rolls against undead take −4. You may grant one item: Lay on Hands may spend its pool to deal that much necrotic to a creature he touches, instead of healing. One mode per use. This module does not spend the pool.",
   75: "Breakpoint 75. Attack rolls against undead take −7. You may suppress one divine Channel Divinity option he actually has. That suppression is yours to do. You may grant Grave Command: once per short rest, one undead that can hear him hesitates, and you adjudicate it. Start the oath conversation. The subclass stays as it is.",
-  100: "Breakpoint 100. The scale locks at 100. Divine Smite is always necrotic. Attack rolls against undead take −10. For you only: he becomes more undead-aligned and supports Null and Tiamat because he comes to believe the takeover should be guided, not stopped. This module does not declare that the Raven Queen has cast him out. Alignment stays as written until you change it. The sheet stays his. Combat is not scripted."
+  100: "Breakpoint 100. The scale is capped at 100; radiant spell casts can reduce it. Divine Smite is always necrotic at 100. Attack rolls against undead take −10. For you only: he becomes more undead-aligned and supports Null and Tiamat because he comes to believe the takeover should be guided, not stopped. This module does not declare that the Raven Queen has cast him out. Alignment stays as written until you change it. The sheet stays his. Combat is not scripted."
 };
 
 const THRESHOLD_ACTIONS = {
@@ -284,10 +284,14 @@ function onPostUseActivity(activity, usageConfig, results) {
     isNecromancy,
     slotLevel,
     baseLevel,
+    hasRadiant: item.type === "spell" && (activity.damage?.parts ?? []).some(
+      part => Array.from(part.types ?? []).includes("radiant")
+    ),
+    isDivineSmite: isDivineSmiteIdentifier(item.system?.identifier),
     cancelled: false
   });
   const source = describeSource(item.name, "cast", credit.reason, slotLevel, baseLevel);
-  if (credit.points > 0) {
+  if (credit.points !== 0) {
     void commitScale(actor, { points: credit.points, source, useId });
     return;
   }
@@ -555,6 +559,7 @@ function rollsIncludeNecrotic(message) {
  * @returns {string}
  */
 function describeSource(name, kind, reason, slotLevel, baseLevel) {
+  if (kind === "cast" && reason === "radiant") return `${name}, radiant spell, cast`;
   if (kind === "cast" && reason === "cantrip") return `${name}, cantrip, cast`;
   if (kind === "cast" && reason === "slot") return `${name}, slot ${slotLevel}, cast`;
   if (kind === "cast" && reason === "base-level") return `${name}, level ${baseLevel}, no slot, cast`;
@@ -580,7 +585,9 @@ function smiteSentence(scale) {
  * @param {{ previous: number, value: number, wouldBe: number, changed: boolean }} step
  */
 async function whisperTick(actor, source, step) {
-  const player = !step.changed && step.value >= 100
+  const player = step.wouldBe < step.previous
+    ? `The prayer brings a little warmth back. ${step.previous} → ${step.value}.`
+    : !step.changed && step.value >= 100
     ? "Something cold answers the blow. The scale stays at 100."
     : `Something cold answers the blow. ${step.previous} → ${step.value}.`;
   const move = step.changed
